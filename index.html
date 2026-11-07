@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test de Integrales Inmediatas - EBAU</title>
-    <!-- CSS de KaTeX -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" crossorigin="anonymous">
     
     <style>
@@ -38,7 +37,7 @@
 
         .container {
             width: 100%;
-            max-width: 680px;
+            max-width: 800px;
             background: var(--surface);
             border-radius: 16px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
@@ -124,11 +123,20 @@
             background: var(--primary-dark);
         }
 
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #475569;
+        }
+
         .progress-bar {
             width: 100%;
-            height: 6px;
+            height: 8px;
             background: #e2e8f0;
-            border-radius: 3px;
+            border-radius: 4px;
             margin-bottom: 1.5rem;
             overflow: hidden;
         }
@@ -146,11 +154,11 @@
             border-radius: 12px;
             text-align: center;
             margin-bottom: 1.5rem;
-            min-height: 100px;
+            min-height: 110px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.25rem;
         }
 
         .options-grid {
@@ -185,18 +193,37 @@
             background: #f8fafc;
         }
 
+        /* INFORME EN 2 COLUMNAS */
         .report-box {
             background: #f8fafc;
             border: 1px dashed #cbd5e1;
             border-radius: 12px;
             padding: 1.5rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 600px) {
+            .report-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .report-col {
+            display: flex;
+            flex-direction: column;
         }
 
         .student-info {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: bold;
             margin-bottom: 0.5rem;
+            color: var(--text);
         }
 
         .score-badge {
@@ -206,23 +233,37 @@
             color: white;
             border-radius: 20px;
             font-weight: bold;
-            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            margin-bottom: 0.75rem;
+            align-self: flex-start;
+        }
+
+        .ip-tag {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
         }
 
         .notice-banner {
             background: #eff6ff;
             border-left: 4px solid var(--primary);
-            padding: 1rem;
+            padding: 0.75rem;
             border-radius: 4px;
-            font-size: 0.9rem;
-            margin-top: 1rem;
+            font-size: 0.85rem;
+            margin-top: auto;
             color: #1e40af;
+        }
+
+        .error-list {
+            max-height: 280px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
         }
 
         .error-item {
             border-bottom: 1px solid var(--border);
-            padding: 0.75rem 0;
-            font-size: 0.95rem;
+            padding: 0.6rem 0;
+            font-size: 0.9rem;
         }
 
         .error-item:last-child {
@@ -253,50 +294,62 @@
 
     <!-- Pantalla 2: Juego -->
     <div id="screen-quiz" class="screen">
-        <div class="progress-bar"><div id="progress" class="progress-fill"></div></div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; color: #64748b;">
-            <span id="question-count">Pregunta 1 de 12</span>
+        <div class="stats-bar">
+            <span id="question-count">Pregunta 1/12</span>
+            <span id="score-count" style="color: var(--success);">Aciertos: 0</span>
         </div>
+        <div class="progress-bar"><div id="progress" class="progress-fill"></div></div>
         
         <div class="question-card" id="question-container"></div>
         <div class="options-grid" id="options-container"></div>
     </div>
 
-    <!-- Pantalla 3: Informe Final -->
+    <!-- Pantalla 3: Informe Final (2 Columnas) -->
     <div id="screen-result" class="screen">
         <div class="header-icon" style="background: rgba(22, 163, 74, 0.1); color: var(--success);">✓</div>
         <h1>Informe de Resultados</h1>
-        <p class="subtitle">Resumen de la prueba realizada</p>
+        <p class="subtitle">Comprobante de realización del test</p>
 
         <div class="report-box">
-            <div class="student-info" id="report-name"></div>
-            <div class="score-badge" id="report-score"></div>
-            
-            <div id="review-container"></div>
+            <div class="report-grid">
+                <!-- Columna 1: Resumen y Alumno -->
+                <div class="report-col">
+                    <div class="student-info" id="report-name"></div>
+                    <div class="score-badge" id="report-score"></div>
+                    <div class="ip-tag" id="report-ip">ID Registro / IP: Verificando...</div>
 
-            <div class="notice-banner">
-                📷 <strong>Instrucciones:</strong> Envía una captura de este informe como respuesta a la tarea creada en el aula virtual.
+                    <div class="notice-banner">
+                        📷 <strong>Entrega:</strong> Realiza una captura de esta pantalla completa y envíala como respuesta a la tarea del Aula Virtual.
+                    </div>
+                </div>
+
+                <!-- Columna 2: Desglose de Errores -->
+                <div class="report-col">
+                    <p style="font-weight: bold; font-size: 0.95rem; margin-bottom: 0.5rem;">Desglose y corrección:</p>
+                    <div id="review-container" class="error-list"></div>
+                </div>
             </div>
         </div>
 
         <button class="btn" style="background: #64748b;" onclick="resetApp()">Finalizar</button>
     </div>
 
-    <!-- Pantalla 4: Bloqueo -->
+    <!-- Pantalla 4: Bloqueo IP / Intento Previo -->
     <div id="screen-blocked" class="screen">
         <div class="header-icon" style="background: rgba(220, 38, 38, 0.1); color: var(--error);">🔒</div>
-        <h1>Test Completado</h1>
-        <p class="subtitle">Ya has registrado un intento en este dispositivo.</p>
+        <h1>Acceso Bloqueado</h1>
+        <p class="subtitle">Ya se ha registrado una participación desde este dispositivo o dirección IP.</p>
         <div class="notice-banner" style="border-color: var(--error); background: #fef2f2; color: #991b1b;">
-            Solo se permite un intento por alumno. Si necesitas realizar un nuevo intento por algún motivo justificado, contacta con tu profesor a través del Aula Virtual.
+            Solo se permite 1 intento por alumno/conexión. Si has tenido algún problema técnico, notifícalo a tu profesor a través del Aula Virtual de EducaMadrid.
         </div>
     </div>
 </div>
 
 <script>
-    // Cargar KaTeX de forma dinámica para prevenir fallos en iFrames de Google Sites
+    let userIP = "Detectando...";
     let katexLoaded = false;
-    
+
+    // Carga de KaTeX dinámica
     function loadScript(src, callback) {
         const script = document.createElement('script');
         script.src = src;
@@ -309,25 +362,40 @@
         katexLoaded = true;
     });
 
-    // Función segura para renderizar fórmulas matemáticas
+    // Control de IP mediante API gratuita pública
+    fetch('https://api.ipify.org?format=json')
+        .then(res => res.json())
+        .then(data => {
+            userIP = data.ip;
+            checkIPLock();
+        })
+        .catch(() => {
+            userIP = "IP-Local-" + Math.floor(Math.random() * 89999 + 10000);
+            checkIPLock();
+        });
+
+    function checkIPLock() {
+        const blockedIPs = JSON.parse(localStorage.getItem("ebau_blocked_ips") || "[]");
+        if (localStorage.getItem("ebau_integrales_completed") || blockedIPs.includes(userIP)) {
+            showScreen("screen-blocked");
+        }
+    }
+
     function renderMath(element, text) {
         element.innerHTML = "";
         const interval = setInterval(function() {
             if (katexLoaded && window.katex) {
                 clearInterval(interval);
                 try {
-                    window.katex.render(text, element, { 
-                        throwOnError: false, 
-                        displayMode: true 
-                    });
+                    window.katex.render(text, element, { throwOnError: false, displayMode: true });
                 } catch (e) {
                     element.innerText = text;
                 }
             }
-        }, 50);
+        }, 40);
     }
 
-    // Banco de Preguntas
+    // Banco de Preguntas EBAU
     const questionBank = [
         {
             math: "\\int \\operatorname{sen}(x^2+1)x \\, dx",
@@ -399,12 +467,6 @@
         score: 0
     };
 
-    window.onload = function() {
-        if (localStorage.getItem("ebau_integrales_completed")) {
-            showScreen("screen-blocked");
-        }
-    };
-
     function showScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
@@ -435,6 +497,7 @@
         const q = state.questions[state.currentIndex];
         
         document.getElementById('question-count').innerText = `Pregunta ${state.currentIndex + 1} de 12`;
+        document.getElementById('score-count').innerText = `Aciertos: ${state.score}`;
         document.getElementById('progress').style.width = `${((state.currentIndex) / 12) * 100}%`;
 
         renderMath(document.getElementById('question-container'), q.math);
@@ -476,11 +539,18 @@
     }
 
     function finishQuiz() {
+        // Guardar bloqueo de LocalStorage y por IP
         localStorage.setItem("ebau_integrales_completed", "true");
+        const blockedIPs = JSON.parse(localStorage.getItem("ebau_blocked_ips") || "[]");
+        if (!blockedIPs.includes(userIP)) {
+            blockedIPs.push(userIP);
+            localStorage.setItem("ebau_blocked_ips", JSON.stringify(blockedIPs));
+        }
 
         document.getElementById('report-name').innerText = `Alumno/a: ${state.studentName}`;
         const percentage = Math.round((state.score / 12) * 100);
         document.getElementById('report-score').innerText = `Puntuación: ${state.score} / 12 (${percentage}%)`;
+        document.getElementById('report-ip').innerText = `IP / Registro: ${userIP} | ${new Date().toLocaleDateString()}`;
 
         const reviewContainer = document.getElementById('review-container');
         reviewContainer.innerHTML = "";
@@ -488,14 +558,8 @@
         const errors = state.userAnswers.filter(a => !a.isCorrect);
 
         if (errors.length === 0) {
-            reviewContainer.innerHTML = "<p style='color: var(--success); font-weight: bold;'>¡Excelente! Has respondido correctamente a todas las integrales.</p>";
+            reviewContainer.innerHTML = "<p style='color: var(--success); font-weight: bold;'>¡Excelente! Has acertado todas las integrales.</p>";
         } else {
-            const title = document.createElement('p');
-            title.style.fontWeight = "bold";
-            title.style.marginBottom = "0.5rem";
-            title.innerText = "Revisión de errores:";
-            reviewContainer.appendChild(title);
-
             errors.forEach(err => {
                 const div = document.createElement('div');
                 div.className = 'error-item';
@@ -505,8 +569,8 @@
                 
                 const correctDiv = document.createElement('div');
                 correctDiv.style.color = 'var(--success)';
-                correctDiv.style.fontSize = '0.9rem';
-                correctDiv.innerHTML = "Solución correcta: ";
+                correctDiv.style.fontSize = '0.85rem';
+                correctDiv.innerHTML = "Correcta: ";
                 const mathSpan = document.createElement('span');
                 renderMath(mathSpan, err.correct);
                 correctDiv.appendChild(mathSpan);

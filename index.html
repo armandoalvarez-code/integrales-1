@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Integrales Inmediatas - EBAU</title>
+    <!-- CSS de KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" crossorigin="anonymous">
+    
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --surface: #ffffff;
+            --background: #f8fafc;
+            --text: #1e293b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --error: #dc2626;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 680px;
+            background: var(--surface);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .header-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.25rem;
+            font-size: 2.2rem;
+            font-family: "Times New Roman", serif;
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary);
+        }
+
+        .btn {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.85rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background: #f1f5f9;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+        }
+
+        @media (min-width: 500px) {
+            .options-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .option-btn {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            text-align: center;
+            font-size: 1rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 60px;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+            background: #f8fafc;
+        }
+
+        .report-box {
+            background: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .student-info {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .score-badge {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .notice-banner {
+            background: #eff6ff;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            color: #1e40af;
+        }
+
+        .error-item {
+            border-bottom: 1px solid var(--border);
+            padding: 0.75rem 0;
+            font-size: 0.95rem;
+        }
+
+        .error-item:last-child {
+            border-bottom: none;
+        }
+
+        .katex-display {
+            margin: 0 !important;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Pantalla 1: Registro -->
+    <div id="screen-start" class="screen active">
+        <div class="header-icon">∫</div>
+        <h1>Test de Integrales</h1>
+        <p class="subtitle">Evaluación de Integrales Inmediatas y Compuestas (EBAU)</p>
+        
+        <div class="input-group">
+            <label for="student-name">Nombre y Apellidos del Alumno:</label>
+            <input type="text" id="student-name" placeholder="Ej. Ana García López" autocomplete="off">
+        </div>
+        
+        <button class="btn" onclick="startQuiz()">Comenzar Test</button>
+    </div>
+
+    <!-- Pantalla 2: Juego -->
+    <div id="screen-quiz" class="screen">
+        <div class="progress-bar"><div id="progress" class="progress-fill"></div></div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; color: #64748b;">
+            <span id="question-count">Pregunta 1 de 12</span>
+        </div>
+        
+        <div class="question-card" id="question-container"></div>
+        <div class="options-grid" id="options-container"></div>
+    </div>
+
+    <!-- Pantalla 3: Informe Final -->
+    <div id="screen-result" class="screen">
+        <div class="header-icon" style="background: rgba(22, 163, 74, 0.1); color: var(--success);">✓</div>
+        <h1>Informe de Resultados</h1>
+        <p class="subtitle">Resumen de la prueba realizada</p>
+
+        <div class="report-box">
+            <div class="student-info" id="report-name"></div>
+            <div class="score-badge" id="report-score"></div>
+            
+            <div id="review-container"></div>
+
+            <div class="notice-banner">
+                📷 <strong>Instrucciones:</strong> Envía una captura de este informe como respuesta a la tarea creada en el aula virtual.
+            </div>
+        </div>
+
+        <button class="btn" style="background: #64748b;" onclick="resetApp()">Finalizar</button>
+    </div>
+
+    <!-- Pantalla 4: Bloqueo -->
+    <div id="screen-blocked" class="screen">
+        <div class="header-icon" style="background: rgba(220, 38, 38, 0.1); color: var(--error);">🔒</div>
+        <h1>Test Completado</h1>
+        <p class="subtitle">Ya has registrado un intento en este dispositivo.</p>
+        <div class="notice-banner" style="border-color: var(--error); background: #fef2f2; color: #991b1b;">
+            Solo se permite un intento por alumno. Si necesitas realizar un nuevo intento por algún motivo justificado, contacta con tu profesor a través del Aula Virtual.
+        </div>
+    </div>
+</div>
+
+<script>
+    // Cargar KaTeX de forma dinámica para prevenir fallos en iFrames de Google Sites
+    let katexLoaded = false;
+    
+    function loadScript(src, callback) {
+        const script = document.createElement('script');
+        script.src = src;
+        script.crossOrigin = "anonymous";
+        script.onload = callback;
+        document.head.appendChild(script);
+    }
+
+    loadScript("https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js", function() {
+        katexLoaded = true;
+    });
+
+    // Función segura para renderizar fórmulas matemáticas
+    function renderMath(element, text) {
+        element.innerHTML = "";
+        const interval = setInterval(function() {
+            if (katexLoaded && window.katex) {
+                clearInterval(interval);
+                try {
+                    window.katex.render(text, element, { 
+                        throwOnError: false, 
+                        displayMode: true 
+                    });
+                } catch (e) {
+                    element.innerText = text;
+                }
+            }
+        }, 50);
+    }
+
+    // Banco de Preguntas
+    const questionBank = [
+        {
+            math: "\\int \\operatorname{sen}(x^2+1)x \\, dx",
+            correct: "-\\frac{1}{2}\\cos(x^2+1)+k",
+            distractors: ["\\frac{1}{2}\\cos(x^2+1)+k", "-\\cos(x^2+1)+k", "\\frac{x^2}{2}\\cos(x^2+1)+k", "-\\frac{1}{2}\\operatorname{sen}(x^2+1)+k", "\\cos(x^2+1)+k"]
+        },
+        {
+            math: "\\int \\frac{3x^2+2x}{x^3+x^2} \\, dx",
+            correct: "\\ln|x^3+x^2|+k",
+            distractors: ["\\frac{1}{x^3+x^2}+k", "3\\ln|x^3+x^2|+k", "\\ln(3x^2+2x)+k", "\\frac{3x^2+2x}{3x^2+2}+k", "e^{x^3+x^2}+k"]
+        },
+        {
+            math: "\\int \\frac{x^2}{\\sqrt{1-(x^3-1)^2}} \\, dx",
+            correct: "\\frac{1}{3}\\operatorname{arc sen}(x^3-1)+k",
+            distractors: ["\\operatorname{arc sen}(x^3-1)+k", "3\\operatorname{arc sen}(x^3-1)+k", "\\frac{1}{3}\\operatorname{arc cos}(x^3-1)+k", "\\frac{1}{3}\\operatorname{arc tg}(x^3-1)+k", "-\\frac{1}{3}\\operatorname{arc sen}(x^3-1)+k"]
+        },
+        {
+            math: "\\int e^{\\cos x}\\operatorname{sen} x \\, dx",
+            correct: "-e^{\\cos x}+k",
+            distractors: ["e^{\\cos x}+k", "e^{-\\operatorname{sen} x}+k", "-\\operatorname{sen} x e^{\\cos x}+k", "\\cos x e^{\\cos x}+k", "-e^{-\\operatorname{sen} x}+k"]
+        },
+        {
+            math: "\\int \\operatorname{tg}(x^2) \\cdot 2x \\, dx",
+            correct: "-\\ln|\\cos(x^2)|+k",
+            distractors: ["\\ln|\\cos(x^2)|+k", "-\\ln|\\operatorname{sen}(x^2)|+k", "\\operatorname{tg}^2(x^2)+k", "-\\frac{1}{2}\\ln|\\cos(x^2)|+k", "\\ln|\\sec(x^2)|+k"]
+        },
+        {
+            math: "\\int \\ln(x^2+1) \\cdot 2x \\, dx",
+            correct: "(x^2+1)\\ln(x^2+1)-(x^2+1)+k",
+            distractors: ["(x^2+1)\\ln(x^2+1)+k", "\\frac{1}{x^2+1}+k", "x^2\\ln(x^2+1)-x^2+k", "2x\\ln(x^2+1)-2x+k", "(x^2+1)\\ln(x^2+1)+(x^2+1)+k"]
+        },
+        {
+            math: "\\int \\frac{e^x}{1+e^{2x}} \\, dx",
+            correct: "\\operatorname{arc tg}(e^x)+k",
+            distractors: ["\\ln|1+e^{2x}|+k", "\\frac{1}{2}\\operatorname{arc tg}(e^x)+k", "\\operatorname{arc sen}(e^x)+k", "e^x\\operatorname{arc tg}(e^x)+k", "\\operatorname{arc tg}(e^{2x})+k"]
+        },
+        {
+            math: "\\int \\operatorname{tg} x \\, dx",
+            correct: "-\\ln|\\cos x|+k",
+            distractors: ["\\ln|\\cos x|+k", "-\\ln|\\operatorname{sen} x|+k", "\\operatorname{tg}^2 x+k", "\\frac{1}{\\cos^2 x}+k", "-\\operatorname{ctg} x+k"]
+        },
+        {
+            math: "\\int \\operatorname{sen}^2 x \\, dx",
+            correct: "\\frac{x}{2}-\\frac{\\operatorname{sen} 2x}{4}+k",
+            distractors: ["\\frac{x}{2}+\\frac{\\operatorname{sen} 2x}{4}+k", "\\frac{\\operatorname{sen}^3 x}{3}+k", "-\\cos^2 x+k", "\\frac{x}{2}-\\frac{\\cos 2x}{4}+k", "x-\\operatorname{sen} 2x+k"]
+        },
+        {
+            math: "\\int \\operatorname{tg}^2 x \\, dx",
+            correct: "\\operatorname{tg} x - x + k",
+            distractors: ["\\operatorname{tg} x + x + k", "\\frac{\\operatorname{tg}^3 x}{3}+k", "\\operatorname{ctg} x - x + k", "\\frac{1}{\\cos^2 x}-x+k", "x-\\operatorname{tg} x+k"]
+        },
+        {
+            math: "\\int 3^{5x^2} x \\, dx",
+            correct: "\\frac{3^{5x^2}}{10\\ln 3}+k",
+            distractors: ["\\frac{3^{5x^2}}{\\ln 3}+k", "\\frac{10\\cdot 3^{5x^2}}{\\ln 3}+k", "\\frac{3^{5x^2}}{5\\ln 3}+k", "10\\ln 3 \\cdot 3^{5x^2}+k", "\\frac{3^{5x^2+1}}{5x^2+1}+k"]
+        },
+        {
+            math: "\\int \\frac{dx}{x \\operatorname{sen}^2(\\ln x)}",
+            correct: "-\\operatorname{ctg}(\\ln x)+k",
+            distractors: ["\\operatorname{ctg}(\\ln x)+k", "\\operatorname{tg}(\\ln x)+k", "-\\operatorname{tg}(\\ln x)+k", "-\\frac{1}{\\operatorname{sen}(\\ln x)}+k", "\\ln|\\operatorname{sen} x|+k"]
+        }
+    ];
+
+    let state = {
+        studentName: "",
+        questions: [],
+        currentIndex: 0,
+        userAnswers: [],
+        score: 0
+    };
+
+    window.onload = function() {
+        if (localStorage.getItem("ebau_integrales_completed")) {
+            showScreen("screen-blocked");
+        }
+    };
+
+    function showScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    function shuffle(array) {
+        return array.sort(() => Math.random() - 0.5);
+    }
+
+    function startQuiz() {
+        const nameInput = document.getElementById('student-name');
+        if (!nameInput.value.trim()) {
+            alert("Por favor, introduce tu nombre y apellidos.");
+            return;
+        }
+
+        state.studentName = nameInput.value.trim();
+        state.questions = shuffle([...questionBank]).slice(0, 12);
+        state.currentIndex = 0;
+        state.userAnswers = [];
+        state.score = 0;
+
+        showScreen('screen-quiz');
+        renderQuestion();
+    }
+
+    function renderQuestion() {
+        const q = state.questions[state.currentIndex];
+        
+        document.getElementById('question-count').innerText = `Pregunta ${state.currentIndex + 1} de 12`;
+        document.getElementById('progress').style.width = `${((state.currentIndex) / 12) * 100}%`;
+
+        renderMath(document.getElementById('question-container'), q.math);
+
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = "";
+
+        const allOptions = shuffle([q.correct, ...q.distractors]);
+
+        allOptions.forEach((opt) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            renderMath(btn, opt);
+            btn.onclick = () => selectOption(opt);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function selectOption(selected) {
+        const q = state.questions[state.currentIndex];
+        const isCorrect = selected === q.correct;
+        
+        if (isCorrect) state.score++;
+        
+        state.userAnswers.push({
+            math: q.math,
+            selected: selected,
+            correct: q.correct,
+            isCorrect: isCorrect
+        });
+
+        state.currentIndex++;
+
+        if (state.currentIndex < 12) {
+            renderQuestion();
+        } else {
+            finishQuiz();
+        }
+    }
+
+    function finishQuiz() {
+        localStorage.setItem("ebau_integrales_completed", "true");
+
+        document.getElementById('report-name').innerText = `Alumno/a: ${state.studentName}`;
+        const percentage = Math.round((state.score / 12) * 100);
+        document.getElementById('report-score').innerText = `Puntuación: ${state.score} / 12 (${percentage}%)`;
+
+        const reviewContainer = document.getElementById('review-container');
+        reviewContainer.innerHTML = "";
+
+        const errors = state.userAnswers.filter(a => !a.isCorrect);
+
+        if (errors.length === 0) {
+            reviewContainer.innerHTML = "<p style='color: var(--success); font-weight: bold;'>¡Excelente! Has respondido correctamente a todas las integrales.</p>";
+        } else {
+            const title = document.createElement('p');
+            title.style.fontWeight = "bold";
+            title.style.marginBottom = "0.5rem";
+            title.innerText = "Revisión de errores:";
+            reviewContainer.appendChild(title);
+
+            errors.forEach(err => {
+                const div = document.createElement('div');
+                div.className = 'error-item';
+                
+                const qDiv = document.createElement('div');
+                renderMath(qDiv, err.math);
+                
+                const correctDiv = document.createElement('div');
+                correctDiv.style.color = 'var(--success)';
+                correctDiv.style.fontSize = '0.9rem';
+                correctDiv.innerHTML = "Solución correcta: ";
+                const mathSpan = document.createElement('span');
+                renderMath(mathSpan, err.correct);
+                correctDiv.appendChild(mathSpan);
+
+                div.appendChild(qDiv);
+                div.appendChild(correctDiv);
+                reviewContainer.appendChild(div);
+            });
+        }
+
+        showScreen('screen-result');
+    }
+
+    function resetApp() {
+        showScreen('screen-blocked');
+    }
+</script>
+
+</body>
+</html>
